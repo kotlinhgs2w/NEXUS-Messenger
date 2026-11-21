@@ -1,24 +1,16 @@
 # NEXUS Messenger
 
-An Android messaging app project built with Kotlin and Jetpack Compose.
+Android messenger starter built with Kotlin, Jetpack Compose, Firebase Authentication, and Cloud Firestore.
 
-## Planned technology
+- Compose sign-in and registration screens
+- Username profile creation and username lookup
+- One-to-one chat creation and Firestore message listeners
+- Local demo mode without Firebase
+- GitHub Actions workflow to build and upload a debug APK
 
-- Kotlin and Jetpack Compose for the Android application
-- Firebase Authentication for account registration and sign-in
-- Cloud Firestore for user profiles, conversations, and messages
-- GitHub Actions for automated Android builds
-
-## Project status
-
-The repository is being set up. Android source files, Firebase configuration, security rules, and the build workflow still need to be added.
-
-Never commit private keys, service-account files, or other secrets. Configure Firebase with your own project credentials before running the app.
+## Online setup
+Follow [FIREBASE_SETUP.md](FIREBASE_SETUP.md) and add your own `app/google-services.json`. Without Firebase configuration, demo users and messages are local to the device and are not shared.
 
 ## Build
-
-After the Android Gradle project is added, build a debug APK with:
-
-```bash
-./gradlew assembleDebug
-```
+With JDK 17 and Gradle installed: `gradle assembleDebug`.
+APK output: `app/build/outputs/apk/debug/app-debug.apk`.
