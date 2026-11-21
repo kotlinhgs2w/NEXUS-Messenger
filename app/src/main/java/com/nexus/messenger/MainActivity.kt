@@ -117,6 +117,22 @@ private fun MessengerScreen(me:Person,db:FirebaseFirestore?,local:Boolean,onLogo
  var draft by remember { mutableStateOf("") }
  val demoMessages=remember { mutableStateListOf<ChatMessage>() }
  var messageListener by remember { mutableStateOf<ListenerRegistration?>(null) }
+ var chatListListener by remember { mutableStateOf<ListenerRegistration?>(null) }
+ DisposableEffect(me.uid,local) {
+  chatListListener?.remove()
+  if(!local && db!=null) {
+   chatListListener=db.collection("chats").whereArrayContains("participants",me.uid).addSnapshotListener { snap,_ ->
+    snap?.documents?.forEach { chat ->
+     val other=(chat.get("participants") as? List<*>)?.filterIsInstance<String>()?.firstOrNull { it!=me.uid }
+     if(other!=null) db.collection("users").document(other).get().addOnSuccessListener { personDoc ->
+      val person=Person(other,personDoc.getString("username") ?: "user",personDoc.getString("email") ?: "")
+      chats=(chats.filterNot { it.uid==other }+person)
+     }
+    }
+   }
+  }
+  onDispose { chatListListener?.remove() }
+ }
  DisposableEffect(selected?.uid,local) {
   messageListener?.remove()
   if(!local&&db!=null&&selected!=null) {
